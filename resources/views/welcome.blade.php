@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel again - with branch dev #3
+                    Laravel again - with branch dev #7
                 </div>
 
                 <div class="links">
