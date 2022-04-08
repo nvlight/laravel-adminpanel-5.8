@@ -29,7 +29,10 @@ Route::group(
 
     Route::group($groupData, function () {
         Route::resource('index', 'MainController')
-            ->names('blod.admin.index');
+            ->names('blog.admin.index');
     });
+
   }
 );
+
+Route::get('user/index', 'Blog\User\MainController@index');

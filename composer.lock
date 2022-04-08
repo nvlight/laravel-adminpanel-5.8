@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "afa1c30860602b5f13d2f08f6834fc8c",
+    "content-hash": "7282d3321e6f181cb84808aa165433ba",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -454,6 +454,72 @@
                 "source": "https://github.com/fideloper/TrustedProxy/tree/4.4.1"
             },
             "time": "2020-10-22T13:48:01+00:00"
+        },
+        {
+            "name": "fomvasss/laravel-meta-tags",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fomvasss/laravel-meta-tags.git",
+                "reference": "3f6f3027c28cdc1b1f28385195413cc0d7842c98"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fomvasss/laravel-meta-tags/zipball/3f6f3027c28cdc1b1f28385195413cc0d7842c98",
+                "reference": "3f6f3027c28cdc1b1f28385195413cc0d7842c98",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "5.5.*|5.6.*|5.7.*|5.8.*|6.0.*|7.0.*",
+                "illuminate/support": "5.5.*|5.6.*|5.7.*|5.8.*|6.0.*|7.0.*",
+                "illuminate/view": "5.5.*|5.6.*|5.7.*|5.8.*|6.0.*|7.0.*",
+                "php": ">=7.0.0"
+            },
+            "type": "composer-package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Fomvasss\\LaravelMetaTags\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "MetaTag": "Fomvasss\\LaravelMetaTags\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Fomvasss\\LaravelMetaTags\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vasyl Fomin",
+                    "email": "fomvasss@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A package to manage SEO (meta-tags, xml-fields, etc.)",
+            "keywords": [
+                "Sitemap",
+                "laravel",
+                "meta",
+                "meta tags",
+                "seo",
+                "tags",
+                "xml-map"
+            ],
+            "support": {
+                "issues": "https://github.com/fomvasss/laravel-meta-tags/issues",
+                "source": "https://github.com/fomvasss/laravel-meta-tags/tree/2.1.0"
+            },
+            "time": "2020-09-28T08:32:07+00:00"
         },
         {
             "name": "laravel/framework",
