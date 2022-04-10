@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Blog\Admin;
 
+use App\Http\Requests\AdminOrderSaveRequest;
 use App\Models\Admin\Order;
 use App\Repositories\Admin\MainRepository;
 use App\Repositories\Admin\OrderRepository;
@@ -113,7 +114,22 @@ class OrderController extends AdminBaseController
      */
     public function destroy($id)
     {
-        //
+        $order = $this->orderRepository->changeStatusOnDelete($id);
+
+        if ($order){
+            $result = Order::destroy($id);
+            if ($result){
+                return redirect()
+                    ->route('blog.admin.orders.index')
+                    ->with(['success' => "Record #{$id} deleted!"]);
+            }else{
+                return back()
+                    ->withErrors(['msg' => 'Error with delete!']);
+            }
+        }else{
+            return back()
+                ->withErrors(['msg' => 'Status change error!']);
+        }
     }
 
     public function change($id){
@@ -132,6 +148,38 @@ class OrderController extends AdminBaseController
                 ->withErrors(['msg' => 'Save error!']);
         }
     }
-    public function save(){}
-    public function forcedestroy(){}
+    public function save(AdminOrderSaveRequest $request, $id){
+        $result = $this->orderRepository->saveOrderComment($id);
+
+        if ($result){
+            return redirect()
+                ->route('blog.admin.orders.edit', $id)
+                ->with(['success' => 'Edit saved!']);
+        }else{
+            return back()
+                ->withErrors(['msg' => 'Save error!']);
+        }
+    }
+
+    public function forcedestroy($id){
+
+//        dump($id);
+//        $order = $this->orderRepository->getId($id);
+//        dump($order);
+//        if (!($order)){
+//            abort(404);
+//        }
+
+        $result = \DB::table('orders')
+            ->delete($id);
+
+        if ($result){
+            return redirect()
+                ->route('blog.admin.orders.index', $id)
+                ->with(['success' => 'Delete success!']);
+        }else{
+            return back()
+                ->withErrors(['msg' => 'Delete error!']);
+        }
+    }
 }

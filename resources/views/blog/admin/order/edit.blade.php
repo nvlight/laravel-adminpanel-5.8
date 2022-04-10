@@ -9,14 +9,13 @@
             <!-- если заказ новый не обработан то выведу и передадим status 1 -->
             @if (!$order->status)
                 <a href="{{route('blog.admin.orders.change', $order->id)}}/?status=1" class="btn btn-success btn-xs">Одобрить</a>
-                <a href="#" class="btn btn-warning btn-xs redact">Редактировать</a>
+                <a href="" class="btn btn-warning btn-xs redact">Редактировать</a>
             @else
                 <a href="{{route('blog.admin.orders.change', $order->id)}}/?status=0" class="btn btn-default btn-xs">Вернуть на доработку</a>
             @endif
 
             <a class="btn btn-xs" href="">
-{{--                {{route('blog.admin.orders.destroy', $order->id)}}--}}
-                <form id="delform" method="post" action=""
+                <form id="delform" method="post" action="{{route('blog.admin.orders.destroy', $order->id)}}"
                       style="float: none">
                     @method('DELETE')
                     @csrf
