@@ -40,7 +40,7 @@ Route::group(
             ->name('blog.admin.orders.change');
         Route::post('/orders/save/{id}',[OrderController::class,'save'])
             ->name('blog.admin.orders.save');
-        Route::post('/orders/forcedestroy/{id}',[OrderController::class,'forcedestroy'])
+        Route::get('/orders/forcedestroy/{id}',[OrderController::class,'forcedestroy'])
             ->name('blog.admin.orders.forcedestroy');
 
     });
