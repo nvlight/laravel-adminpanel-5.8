@@ -112,10 +112,8 @@
                 <li class="header">Меню</li>
                 <!-- Optionally, you can add icons to the links -->
                 <li><a href="/"><i class="fa fa-home"></i> <span>В магазин</span></a></li>
-                <li><a href=""><i class="fa fa-user"></i> <span>Главная админки</span></a></li>
-                <li><a href=""><i class="fa fa-shopping-cart"></i> <span>Заказы</span></a></li>
-
-
+                <li><a href="{{route('blog.admin.index')}}"><i class="fa fa-user"></i> <span>Главная админки</span></a></li>
+                <li><a href="{{route('blog.admin.orders.index')}}"><i class="fa fa-shopping-cart"></i> <span>Заказы</span></a></li>
 
                 <li class="treeview">
                     <a href="#"><i class="fa fa-navicon"></i> <span>Категории</span>
@@ -197,7 +195,7 @@
     <div class="content-wrapper">
 
         <main id="app">
-{{--            @include('blog.admin.components.result_messages')--}}
+            @include('blog.admin.components.result_messages')
             @yield('content')
         </main>
     </div>

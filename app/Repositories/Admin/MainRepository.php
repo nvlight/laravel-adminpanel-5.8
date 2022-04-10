@@ -45,7 +45,7 @@ class MainRepository extends CoreRepository
 //    }
 
     public static function getCountOrders(){
-        return self::getTableCount('orders','1');
+        return self::getTableCount('orders','');
     }
 
     public static function getCountUsers(){
