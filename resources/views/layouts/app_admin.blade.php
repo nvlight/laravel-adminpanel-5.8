@@ -122,8 +122,8 @@
               </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="">Список категорий</a></li>
-                        <li><a href="">Добавить категорию</a></li>
+                        <li><a href="{{route('blog.admin.categories.index')}}">Список категорий</a></li>
+                        <li><a href="{{route('blog.admin.categories.create')}}">Добавить категорию</a></li>
                     </ul>
                 </li>
                 <li class="treeview">

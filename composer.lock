@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7282d3321e6f181cb84808aa165433ba",
+    "content-hash": "039f3215777294822d44b1b133428d20",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -739,6 +739,62 @@
                 "source": "https://github.com/laravel/tinker/tree/v1.0.10"
             },
             "time": "2019-08-07T15:10:45+00:00"
+        },
+        {
+            "name": "lavary/laravel-menu",
+            "version": "v1.8.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lavary/laravel-menu.git",
+                "reference": "4f14cb9b11cfcd9839d1d87c806632c84a94d3be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lavary/laravel-menu/zipball/4f14cb9b11cfcd9839d1d87c806632c84a94d3be",
+                "reference": "4f14cb9b11cfcd9839d1d87c806632c84a94d3be",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": ">=5.0",
+                "illuminate/view": ">=5.0",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Lavary\\Menu\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "Menu": "Lavary\\Menu\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Lavary\\Menu\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lavary",
+                    "email": "mrl.8081@gmail.com"
+                }
+            ],
+            "description": "A quick way to create menus in Laravel 5",
+            "homepage": "https://github.com/lavary/laravel-menu",
+            "keywords": [
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/lavary/laravel-menu/issues",
+                "source": "https://github.com/lavary/laravel-menu/tree/v1.8.3"
+            },
+            "time": "2021-02-22T16:41:26+00:00"
         },
         {
             "name": "league/flysystem",

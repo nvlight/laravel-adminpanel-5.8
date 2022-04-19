@@ -12,6 +12,7 @@
 */
 
 use \App\Http\Controllers\Blog\Admin\OrderController;
+use \App\Http\Controllers\Blog\Admin\CategoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,7 +36,6 @@ Route::group(
 
         Route::resource('orders', 'OrderController')
             ->names('blog.admin.orders');
-
         Route::get('/orders/change/{id}', [OrderController::class,'change'])
             ->name('blog.admin.orders.change');
         Route::post('/orders/save/{id}',[OrderController::class,'save'])
@@ -43,6 +43,10 @@ Route::group(
         Route::get('/orders/forcedestroy/{id}',[OrderController::class,'forcedestroy'])
             ->name('blog.admin.orders.forcedestroy');
 
+        Route::get('/categories/mydel', [CategoryController::class, 'mydel'])
+            ->name('blog.admin.categories.mydel');
+        Route::resource('categories', 'CategoryController')
+            ->names('blog.admin.categories');
     });
 
   }
