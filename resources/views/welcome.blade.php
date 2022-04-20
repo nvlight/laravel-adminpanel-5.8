@@ -12,6 +12,7 @@
         <!-- Styles -->
         <style>
             html, body {
+                background-image: url("{{asset('images/main.jpg')}}");
                 background-color: #fff;
                 color: #636b6f;
                 font-family: 'Nunito', sans-serif;
@@ -48,52 +49,69 @@
                 font-size: 84px;
             }
 
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
             .m-b-md {
                 margin-bottom: 30px;
+            }
+
+            .buttonsTagA {
+                padding: 7px 15px;
+                margin-right: 40px;
+                border: 1px solid darkblue;
+                font-size: 19px;
+                font-weight: bold;
+            }
+            .colorCustomAndTdN {
+                color: #0075ae;
+                text-decoration: none;
             }
         </style>
     </head>
     <body>
+        <div>
+            @php
+                //$p = \App\SBlog\Core\BlogApp::get_instance();
+                //dump($p->getProperties());
+                //dump($p->getProperties()['admin_email']);
+            @endphp
+        </div>
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        @if(Auth::user()->isDisabled())
+                            <strong><a href="{{ url('/') }}" class="colorCustomAndTdN buttonsTagA">Main</a></strong>
+                        @elseif(Auth::user()->isUser())
+                            <strong><a href="{{ url('/user/index') }}" class="colorCustomAndTdN buttonsTagA">Cabinet</a></strong>
+                            <strong><a href="{{ url('/') }}" class="colorCustomAndTdN buttonsTagA">Main</a></strong>
+                        @elseif(Auth::user()->isVisitor())
+                            <strong><a href="{{ url('/') }}" class="colorCustomAndTdN buttonsTagA">Main</a></strong>
+                        @elseif(Auth::user()->isAdministrator())
+                            <strong><a href="{{ url('/admin/index') }}" class="colorCustomAndTdN buttonsTagA">Admin Panel</a></strong>
+                            <strong><a href="{{ url('/') }}" class="colorCustomAndTdN buttonsTagA">Main</a></strong>
+                        @endif
+
+                        <strong>
+                            <a href="{{ route('logout') }}" class="colorCustomAndTdN buttonsTagA"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit()"
+                            >Go away</a>
+                        </strong>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+
                     @else
-                        <a href="{{ route('login') }}">Login</a>
+                        <strong>
+                            <a href="{{ route('login') }}" class="colorCustomAndTdN buttonsTagA">Login</a>
+                        </strong>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
+                            <a href="{{ route('register') }}" class="colorCustomAndTdN buttonsTagA">Register</a>
                         @endif
                     @endauth
                 </div>
             @endif
 
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel again - with branch dev #7
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
-            </div>
         </div>
     </body>
 </html>

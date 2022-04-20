@@ -178,6 +178,7 @@ return [
 
         // my providers
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Lavary\Menu\ServiceProvider::class,
 
     ],
 
@@ -230,6 +231,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        // my aliases
+        'MetaTag' => \Fomvasss\LaravelMetaTags\Facade::class,
+        'Menu' => \Lavary\Menu\Facade::class,
     ],
 
 ];
