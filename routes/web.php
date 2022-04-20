@@ -55,5 +55,5 @@ Route::group(
 
   }
 );
-
+// add comments
 Route::get('user/index', 'Blog\User\MainController@index');
