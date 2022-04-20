@@ -63,7 +63,6 @@ class OrderController extends AdminBaseController
      */
     public function show($id)
     {
-        //
     }
 
     /**
