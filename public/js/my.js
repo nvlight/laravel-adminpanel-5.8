@@ -1,4 +1,4 @@
-/* confirm delete order */
+/** confirm delete order */
 // .delete
 let deleteHandler = document.querySelectorAll('.delete');
 if (deleteHandler){
@@ -22,7 +22,7 @@ if (deletebdHandler){
     }
 }
 
-/* order edit ---  */
+/** order edit ---  */
 // .redact
 let redactHandler = document.querySelector('.redact');
 if (redactHandler){
@@ -35,3 +35,15 @@ if (redactHandler){
     });
 }
 
+/** подсвечивание активного элемента меню*/
+$('.sidebar-menu a').each(function () {
+    var location = window.location.protocol + '//' + window.location.host + window.location.pathname;
+    var link = this.href;
+    if (link === location && link !== ''){
+        $(this).parent().addClass('active');
+        $(this).closest('.treeview').addClass('active');
+    }
+});
+
+/** CKEditor */
+// $('#editor1').ckeditor();

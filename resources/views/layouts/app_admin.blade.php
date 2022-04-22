@@ -72,7 +72,7 @@
                             <li class="user-footer">
                                 <div class="pull-left">
 {{--                                    {{route('blog.admin.users.edit',Auth::user()->id)}}--}}
-                                    <a href="" class="btn btn-default btn-flat">Профиль</a>
+                                    <a href="{{ route('blog.admin.users.edit', Auth::user()->id) }}" class="btn btn-default btn-flat">Профиль</a>
                                 </div>
                                 <div class="pull-right">
                                     <a href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -133,11 +133,11 @@
               </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="">Список товаров</a></li>
-                        <li><a href="">Добавить товар</a></li>
+                        <li><a href="{{route('blog.admin.products.index')}}">Список товаров</a></li>
+                        <li><a href="{{route('blog.admin.products.create')}}">Добавить товар</a></li>
                     </ul>
                 </li>
-                <li><a href=""><i class="fa fa-database"></i> <span>Кэширование</span></a></li>
+                <li><a href="#"><i class="fa fa-database"></i> <span>Кэширование</span></a></li>
                 <li class="treeview">
                     <a href="#"><i class="fa fa-users"></i> <span>Пользователи</span>
                         <span class="pull-right-container">
@@ -156,8 +156,8 @@
 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="">Список валют</a></li>
-                        <li><a href="">Добавить валюту</a></li>
+                        <li><a href="#">Список валют</a></li>
+                        <li><a href="#">Добавить валюту</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -167,8 +167,8 @@
 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="">Группы фильтров</a></li>
-                        <li><a href="">Фильтры</a></li>
+                        <li><a href="#">Группы фильтров</a></li>
+                        <li><a href="#">Фильтры</a></li>
                     </ul>
                 </li>
             </ul>
@@ -217,6 +217,7 @@
 
 <script>
     var pathd = '{{PATH}}';
+    //console.log('pathd: '+pathd);
 </script>
 <!-- jQuery 3 -->
 <script src="{{asset('adminlte/bower_components/jquery/dist/jquery.min.js')}}"></script>
@@ -230,7 +231,34 @@
 <!-- AdminLTE App -->
 <script src="{{asset('adminlte/dist/js/adminlte.min.js')}}"></script>
 
+<script src="{{asset('adminlte/bower_components/ckeditor/ckeditor.js')}}" ></script>
+<script src="{{asset('adminlte/bower_components/ckeditor/adapters/jquery.js')}}" ></script>
+
 <script src="{{asset('js/my.js')}}" ></script>
+
+{{--<script src="{{asset('adminlte/bower_components/ckeditor/ckeditor.js')}}" ></script>--}}
+{{--@include('ckfinder::setup')--}}
+
+<script>
+    CKEDITOR.replace( 'editor1', {
+        filebrowserBrowseUrl:      '{{ asset(route('ckfinder_browser')) }}',
+        filebrowserImageBrowseUrl: '{{ asset(route('ckfinder_browser')) }}?type=Images',
+        filebrowserFlashBrowseUrl: '{{ asset(route('ckfinder_browser')) }}?type=Flash',
+        filebrowserUploadUrl:      '{{ asset(route('ckfinder_connector')) }}?command=QuickUpload&type=Files',
+        filebrowserImageUploadUrl: '{{ asset(route('ckfinder_connector')) }}?command=QuickUpload&type=Images',
+        filebrowserFlashUploadUrl: '{{ asset(route('ckfinder_connector')) }}?command=QuickUpload&type=Flash'
+    });
+
+    {{--CKEDITOR.replace( 'editor1', {--}}
+    {{--    filebrowserBrowseUrl:      "{{asset('/adminlte/bower_components/kcfinder/browse.php?opener=ckeditor&type=files')}}",--}}
+    {{--    filebrowserImageBrowseUrl: "{{asset('/adminlte/bower_components/kcfinder/browse.php?opener=ckeditor&type=images')}}",--}}
+    {{--    filebrowserFlashBrowseUrl: "{{asset('/adminlte/bower_components/kcfinder/browse.php?opener=ckeditor&type=flash')}}",--}}
+    {{--    filebrowserUploadUrl:      "{{asset('/adminlte/bower_components/kcfinder/upload.php?opener=ckeditor&type=files')}}",--}}
+    {{--    filebrowserImageUploadUrl: "{{asset('/adminlte/bower_components/kcfinder/upload.php?opener=ckeditor&type=images')}}",--}}
+    {{--    filebrowserFlashUploadUrl: "{{asset('/adminlte/bower_components/kcfinder/upload.php?opener=ckeditor&type=flash')}}"--}}
+    {{--});--}}
+
+</script>
 
 <!-- === = ===  -->
 
