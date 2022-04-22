@@ -43,4 +43,13 @@ class ProductRepository extends CoreRepository
             ->count();
         return $count;
     }
+
+    public function getProducts($q){
+        $products = \DB::table('products')
+            ->select('id', 'title')
+            ->where('title','LIKE', ["%{$q}%"])
+            ->limit(8)
+            ->get();
+        return $products;
+    }
 }
