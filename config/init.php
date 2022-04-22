@@ -20,7 +20,7 @@ $allowed_hosts = 'http://laravel.admin.panel/index.php';
 
 $app_path = preg_replace("#[^/]+#",'', $allowed_hosts);
 $app_path = preg_replace("/public/",'', $app_path);
-$need_path = 'http://laravel.admin.panel/';
+$need_path = 'http://laravel-admin-panel:86';
 
 if (!defined('PATH')) define('PATH', $need_path);
 if (!defined('ADMIN')) define('ADMIN', PATH . 'admin/index');
