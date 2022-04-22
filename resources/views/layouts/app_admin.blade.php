@@ -10,6 +10,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="{{asset('adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
+    <!-- стили для select2 -->
+    <link rel="stylesheet" href="{{asset('adminlte/bower_components/select2/dist/css/select2.css')}}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{asset('adminlte/bower_components/font-awesome/css/font-awesome.min.css')}}">
     <!-- Ionicons -->
@@ -213,7 +215,8 @@
 
 
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+{{--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>--}}
+<script src="{{asset('js/jquery-1.9.1.js')}}"></script>
 
 <script>
     var pathd = '{{PATH}}';
@@ -232,7 +235,9 @@
 <script src="{{asset('adminlte/dist/js/adminlte.min.js')}}"></script>
 
 <script src="{{asset('adminlte/bower_components/ckeditor/ckeditor.js')}}" ></script>
-<script src="{{asset('adminlte/bower_components/ckeditor/adapters/jquery.js')}}" ></script>
+{{--<script src="{{asset('adminlte/bower_components/ckeditor/adapters/jquery.js')}}" ></script>--}}
+{{-- давление джс кода для select2 --}}
+<script src="{{asset('adminlte/bower_components/select2/dist/js/select2.full.js')}}" ></script>
 
 <script src="{{asset('js/my.js')}}" ></script>
 
@@ -261,6 +266,7 @@
 </script>
 
 <!-- === = ===  -->
+@include('blog.admin.product.include.script_related_prod')
 
 </body>
 </html>

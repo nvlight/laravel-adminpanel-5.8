@@ -47,3 +47,9 @@ $('.sidebar-menu a').each(function () {
 
 /** CKEditor */
 // $('#editor1').ckeditor();
+
+/** Сброс фильтров товара, админка*/
+$('#reset-filter').click(function (){
+    $('#filter input[type=radio]').prop('checked', false);
+    return false;
+});

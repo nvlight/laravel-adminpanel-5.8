@@ -13,6 +13,7 @@
 
 use \App\Http\Controllers\Blog\Admin\OrderController;
 use \App\Http\Controllers\Blog\Admin\CategoryController;
+use \App\Http\Controllers\Blog\Admin\ProductController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,8 +51,11 @@ Route::group(
 
         Route::resource('users', 'UserController')
             ->names('blog.admin.users');
+
+        Route::get('/products/related', [ProductController::class, 'related']);
         Route::resource('products', 'ProductController')
             ->names('blog.admin.products');
+
     });
 
   }
@@ -65,5 +69,5 @@ Route::any('/ckfinder/connector', '\CKSource\CKFinderBridge\Controller\CKFinderC
 Route::any('/ckfinder/browser', '\CKSource\CKFinderBridge\Controller\CKFinderController@browserAction')
     ->name('ckfinder_browser');
 
-Route::any('/ckfinder/examples/{example?}', 'CKSource\CKFinderBridge\Controller\CKFinderController@examplesAction')
-    ->name('ckfinder_examples');
+//Route::any('/ckfinder/examples/{example?}', 'CKSource\CKFinderBridge\Controller\CKFinderController@examplesAction')
+//    ->name('ckfinder_examples');
