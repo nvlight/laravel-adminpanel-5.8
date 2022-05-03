@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Blog\Admin;
 
+use App\Http\Requests\AdminProductsCreateRequest;
 use App\Models\Admin\Category;
 use App\Models\Admin\Product;
 use App\Repositories\Admin\ProductRepository;
+use App\SBlog\Core\BlogApp;
 use Illuminate\Http\Request;
 use MetaTag;
 
@@ -44,7 +46,7 @@ class ProductController extends AdminBaseController
      */
     public function create()
     {
-        $item = new Product();
+        $product = new Product();
         $categories = Category::
                         where('parent_id','0')
                         ->get();
@@ -53,19 +55,44 @@ class ProductController extends AdminBaseController
         return view('blog.admin.product.create', [
             'categories' => $categories,
             'delimiter' => '-',
-            'item' => $item,
+            'product' => $product,
         ]);
     }
 
     /**
-     * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param AdminProductsCreateRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(AdminProductsCreateRequest $request)
     {
-        dump($request->all());
+        $data = $request->all();
+        $product = (new Product())->make($data);
+
+        //dump($product);
+        $product->status = $request->status ? '1' : '0';
+        $product->hit    = $request->hit ? '1' : '0';
+        $product->category_id = $request->parent_id ?? '0';
+        $product->brand_id = 1; // just fix it for now
+        //dump($product);
+        $save = $product->save();
+        if ($save){
+            //dump(\Session::all());
+            //dump(\Session::get('gallery'));
+            $id = $product->id;
+            $this->productRepository->getImg($product);
+            $this->productRepository->editFilter($id, $data);
+            $this->productRepository->editRelatedProduct($id, $data);
+            $this->productRepository->saveGallery($id);
+
+            return redirect()
+                ->route('blog.admin.products.create', [$product->id])
+                ->with(['success' => 'Успешно сохранено']);
+        }else{
+            return back()
+                ->withErrors(['img' => 'Ошибка сохранения'])
+                ->withInput();
+        }
     }
 
     /**
@@ -128,4 +155,100 @@ class ProductController extends AdminBaseController
         }
         die(json_encode($data));
     }
+
+    protected function fileUploadValidator($request){
+        $validator = \Validator::make($request->all(),
+            [
+                'file' => 'image|max:5000',
+            ],
+            [
+                'file.image' => 'Файл должен быть картинкой (jpeg, png, gif, svg)',
+                'file.max' => 'Максимальный размер картинки - 5 Мб!',
+            ]);
+        return $validator;
+    }
+    protected function fileUploadValidate($validator){
+        if ($validator->fails()){
+            return [    'fail' => true,
+                'errors' => $validator->errors(),];
+        }else{
+            return [ 'fail' => false ];
+        }
+    }
+
+    public function ajaxImage(Request $request){
+        if ($request->isMethod('get')){
+            return view('blog.admin.product.include.image_single_edit');
+        }else{
+            $validator = $this->fileUploadValidator($request);
+            if ($this->fileUploadValidate($validator)['fail']){
+                return $this->fileUploadValidate($validator);
+            }
+
+            $extension = $request->file('file')->getClientOriginalExtension();
+            $dir = 'uploads/single/';
+            $filename = uniqid() . '_' . time() . '.' . $extension;
+            $request->file('file')->move($dir, $filename);
+            $vmax = BlogApp::get_instance()->getProperty('img_width');
+            $hmax = BlogApp::get_instance()->getProperty('img_height');
+
+            $this->productRepository->resizeImg($dir . $filename, $dir . $filename, $extension, $vmax, $hmax);
+            \Session::put('single', $filename);
+            return $filename;
+        }
+    }
+
+    /**
+     * Delete single image
+     *
+     * @param $filename
+     * @return void
+     */
+    public function deleteImage($filename){
+        echo $filename;
+        \File::delete('uploads/single/'.$filename);
+//        $allFiles = \File::allFiles('uploads/single/');
+//        dump($allFiles);
+//        dump($allFiles[0]->getFilename());\File::exists()
+    }
+
+    /**
+     * Delete img from gallery
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function deleteGallery(Request $request){
+        $id = $request->post('id') ?? null;
+        $src = $request->post('src') ?? null;
+        if (!$id || $src){
+            return;
+        }
+        if (\DB::delete("DELETE from galleries WHERE product_id = ? AND img = ?", [$id, $src])){
+            @unlink("uploads/gallery/{$src}");
+            exit('1');
+        }
+        return;
+    }
+
+    public function gallery(Request $request){
+        $validator = $this->fileUploadValidator($request);
+        if ($this->fileUploadValidate($validator)['fail']){
+            return $validator;
+        }
+
+        if ($request->has('upload')){
+            $gallery_width = BlogApp::get_instance()->getProperty('gallery_width');
+            $gallery_height = BlogApp::get_instance()->getProperty('gallery_height');
+            $name = $request->post('name');
+            $result = $this->productRepository->uploadGallery($name, $gallery_width, $gallery_height);
+            if (array_key_exists('file', $result)){
+                \Session::push('gallery', $result['file']);
+                \Session::save();
+                $result['dump'] = \Session::get('gallery');
+            }
+            die(json_encode($result));
+        }
+    }
+
 }

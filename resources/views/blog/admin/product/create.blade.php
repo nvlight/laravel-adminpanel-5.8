@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="box">
-                    <form method="POST"  action="{{route('blog.admin.products.store',$item->id)}}" data-toggle="validator" id="add">
+                    <form method="POST"  action="{{route('blog.admin.products.store',$product->id)}}" data-toggle="validator" id="add">
                         @csrf
 
                         <div class="box-body">
@@ -29,7 +29,7 @@
                                 <select name="parent_id" id="parent_id" class="form-control" required>
                                     <option>-- выберите категорию --</option>
 
-                                    @include('blog.admin.category.include.edit_categories_all_list',['categories' => $categories])
+                                    @include('blog.admin.category.include.edit_categories_all_list',['categories' => $categories, 'item' => $product])
 
                                 </select>
                             </div>
@@ -87,11 +87,11 @@
 
                             <div class="form-group">
                                 <div class="col-md-4">
-{{--                                    @include('blog.admin.product.include.image_single_create')--}}
+                                    @include('blog.admin.product.include.image_single_create')
                                 </div>
 
                                 <div class="col-md-8">
-{{--                                    @include('blog.admin.product.include.image_gallery_create')--}}
+                                    @include('blog.admin.product.include.image_gallery_create')
                                 </div>
                             </div>
 
