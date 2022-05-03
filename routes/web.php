@@ -53,6 +53,27 @@ Route::group(
             ->names('blog.admin.users');
 
         Route::get('/products/related', [ProductController::class, 'related']);
+
+        Route::match(['get','post'],'/products/ajax-image-upload',[ProductController::class,'ajaxImage']);
+
+        Route::delete('/products/ajax-image-remove/{filename}',  [ProductController::class,'deleteImage']); //'ProductController@deleteImage'
+        Route::get('/products/ajax-image-remove/{filename}',[ProductController::class,'deleteImage']);
+
+        Route::post('/products/gallery',[ProductController::class,'gallery'])
+            ->name('blog.admin.products.gallery');
+        Route::post('/products/delete-gallery',[ProductController::class,'deleteGallery'])
+            ->name('blog.admin.products.deletegallery');
+
+        Route::get('/products/testpush', function (){
+            echo "its all fine <br>";
+            //dump(\Session::get('chich'));
+            dump(\Session::all());
+//            \Session::push('chich', 'first chich');
+//            \Session::push('chich', 'second chich');
+//            \Session::push('chich', 'fird chich');
+//            \Session::push('chich', 'and so on chich!');
+        });
+
         Route::resource('products', 'ProductController')
             ->names('blog.admin.products');
 
