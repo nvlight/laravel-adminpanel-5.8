@@ -73,7 +73,7 @@ class ProductController extends AdminBaseController
         $product->status = $request->status ? '1' : '0';
         $product->hit    = $request->hit ? '1' : '0';
         $product->category_id = $request->parent_id ?? '0';
-        $product->brand_id = 1; // just fix it for now
+        $product->brand_id = 1; // todo - just fix it for now, rework after!
         //dump($product);
         $save = $product->save();
         if ($save){
@@ -86,7 +86,7 @@ class ProductController extends AdminBaseController
             $this->productRepository->saveGallery($id);
 
             return redirect()
-                ->route('blog.admin.products.create', [$product->id])
+                ->route('blog.admin.products.edit', [$product->id])
                 ->with(['success' => 'Успешно сохранено']);
         }else{
             return back()
@@ -112,9 +112,35 @@ class ProductController extends AdminBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        //
+        //$product = $this->productRepository->getInfoProduct($id);
+        $id = $product->id;
+        $categories = Category::
+            where('parent_id','0')
+            ->get();
+
+        BlogApp::get_instance()->setProperty('parent_id', $product->category_id);
+        //dump(BlogApp::get_instance()->getProperty('parent_id'));
+
+        $filter = $this->productRepository->getFiltersProduct($id);
+        $related = $this->productRepository->getRelatedProduct($id);
+        $images = $this->productRepository->getGallery($id);
+        //dump($categories);
+        //dump($images);
+        //dump($filter);
+        //dump($related->toArray());
+        //die;
+
+        MetaTag::setTags(['title' => 'Редактирование продукта #' . $id]);
+        return view('blog.admin.product.edit', [
+            'categories' => $categories,
+            'delimiter' => '-',
+            'product' => $product,
+            'filter' => $filter,
+            'related' => $related,
+            'images' => $images,
+        ]);
     }
 
     /**
@@ -124,9 +150,32 @@ class ProductController extends AdminBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AdminProductsCreateRequest $request, Product $product)
     {
-        //
+        $data = $request->all();
+        //dump($data);
+        //dump($product->toArray());
+        $product->fill($data);
+        $product->category_id = $request->parent_id ?? 0;
+        $product->hit =    $request->hit    ? '1' : '0';
+        $product->status = $request->status ? '1' : '0';
+        //dump($product->toArray());
+        $this->productRepository->getImg($product);
+        $save = $product->save();
+        if ($save){
+            //$this->productRepository->getImg($product);
+            $this->productRepository->editFilter($product->id, $data);
+            $this->productRepository->editRelatedProduct($product->id, $data);
+            $this->productRepository->saveGallery($product->id);
+
+            return redirect()
+                ->route('blog.admin.products.edit', [$product->id])
+                ->with(['success' => 'Успешно обновлено']);
+        }else{
+            return back()
+                ->withErrors()
+                ->withInput();
+        }
     }
 
     /**
@@ -194,6 +243,7 @@ class ProductController extends AdminBaseController
 
             $this->productRepository->resizeImg($dir . $filename, $dir . $filename, $extension, $vmax, $hmax);
             \Session::put('single', $filename);
+            \Session::save();
             return $filename;
         }
     }
@@ -205,8 +255,17 @@ class ProductController extends AdminBaseController
      * @return void
      */
     public function deleteImage($filename){
-        echo $filename;
-        \File::delete('uploads/single/'.$filename);
+        $result = [];
+        try {
+            $result['success'] = 1;
+            $result['message'] = 'success deleted! file: ' . $filename;
+            \File::delete('uploads/single/'.$filename);
+        }catch (\Exception $e){
+            $result['success'] = 0;
+            $result['message'] = 'error with delete file: ' . $filename;
+            $result['error'] = $e->getCode() . ' - ' . $e->getMessage();
+        }
+        die(json_encode($result));
 //        $allFiles = \File::allFiles('uploads/single/');
 //        dump($allFiles);
 //        dump($allFiles[0]->getFilename());\File::exists()
@@ -221,14 +280,33 @@ class ProductController extends AdminBaseController
     public function deleteGallery(Request $request){
         $id = $request->post('id') ?? null;
         $src = $request->post('src') ?? null;
-        if (!$id || $src){
-            return;
+
+        if (!$id || !$src){
+            $result = [
+                'success' => 0,
+                'message' => 'id or src is null'
+            ];
+            die(json_encode($result));
         }
+        $result = [
+            'id' => $id,
+            'src' => $src,
+        ];
+        //die(json_encode($result));
+
         if (\DB::delete("DELETE from galleries WHERE product_id = ? AND img = ?", [$id, $src])){
             @unlink("uploads/gallery/{$src}");
-            exit('1');
+            $result = [
+                'success' => 1,
+                'message' => 'Удалена запись в БД и сам файл!',
+            ];
+            die(json_encode($result));
         }
-        return;
+        $result = [
+            'success' => 0,
+            'message' => 'Что-то пошло не так при удалении',
+        ];
+        die(json_encode($result));
     }
 
     public function gallery(Request $request){

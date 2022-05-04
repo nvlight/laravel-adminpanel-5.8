@@ -13,11 +13,11 @@
         {
             $data = [];
 
-            for ($y = 1; $y <= 19; $y++) {
+            for ($y = 1; $y <= 3; $y++) {
                 for ($i = 1; $i <= 17; $i++) {
                     $data[] = [
-                        'attr_id' => $y,
                         'product_id' => $i,
+                        'attr_id' => $y,
                     ];
                 }
             }

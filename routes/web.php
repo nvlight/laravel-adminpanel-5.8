@@ -57,7 +57,7 @@ Route::group(
         Route::match(['get','post'],'/products/ajax-image-upload',[ProductController::class,'ajaxImage']);
 
         Route::delete('/products/ajax-image-remove/{filename}',  [ProductController::class,'deleteImage']); //'ProductController@deleteImage'
-        Route::get('/products/ajax-image-remove/{filename}',[ProductController::class,'deleteImage']);
+        //Route::get('/products/ajax-image-remove/{filename}',[ProductController::class,'deleteImage']);
 
         Route::post('/products/gallery',[ProductController::class,'gallery'])
             ->name('blog.admin.products.gallery');
