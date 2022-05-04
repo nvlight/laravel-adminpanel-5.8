@@ -145,12 +145,13 @@ class ProductRepository extends CoreRepository
             \Session::forget('single');
             //dump('wiw?');
             //dump($product->toArray());
-            //die;
+            //die('im  here');
             return;
         }
-        if (!\Session::get('single') && !is_file(WWW . '/uploads/single/') . $product->img ){
+        if (!\Session::get('single') && !is_file(WWW . '/uploads/single/' . $product->img ) ){
             $product->img = null;
             $product->save();
+            //die('im  there');
             return;
         }
     }
@@ -194,6 +195,10 @@ class ProductRepository extends CoreRepository
         }
 
         /** если меняем фильтры */
+        //dump($filter);
+        //dump($data['attrs']);
+        //dump(array_diff($filter, $data['attrs']));
+        //echo "chich<br>";
         if (isset($data['attrs']) && count($data['attrs']) && array_diff($filter, $data['attrs'])){
             //dump($result);
             // #1 delete
@@ -220,15 +225,23 @@ class ProductRepository extends CoreRepository
      * @return void
      */
     public function editRelatedProduct($id, $data){
+
+        //dump($id);
+        //dump($data);
+
         $related_products = DB::table('related_products')
             ->select('related_id')
             ->where('product_id', $id)
             ->pluck('related_id')
             ->toArray();
+
+        //dump(empty($data['related']));
+        //dump($data['related']);
         //dump($related_products);
+        //die;
 
         /** Если убрали связанные товары */
-        if (!empty($related_products) && empty($data['related'])){
+        if ( empty($data['related']) && !empty($related_products) ){
             DB::table('related_products')
                 ->where('product_id', $id)
                 ->delete();
@@ -236,35 +249,47 @@ class ProductRepository extends CoreRepository
         }
 
         /** Если добавили связанные товары */
-        if (empty($related_products) && !empty($data['related'])){
+        if ( !empty($data['related']) && empty($related_products) ){
+            //die('02');
+            $sql_part = '';
             foreach($data['related'] as $v){
                 $v = (int)$v;
-                $sql_part = '';
                 $sql_part .= "({$id},{$v}),";
-                $sql_part = rtrim($sql_part, ',');
-                DB::insert("insert into related_products (product_id, related_id) VALUES $sql_part");
-                return;
             }
+            $sql_part = rtrim($sql_part, ',');
+            DB::insert("insert into related_products (product_id, related_id) VALUES $sql_part");
+            //die('1');
+            return;
         }
 
+        //dump($data['related']);
+        //dump($related_products);
+
         /** Если поменяли связанные товары */
-        if (!empty($data['related']) && array_diff($related_products, $data['related'])){
+        //  && array_diff($related_products, $data['related'])
+        if ( !empty($data['related']) ){
+            //dump(array_diff($related_products, $data['related']));
+            //dump(array_diff($data['related'], $related_products));
+
+            //die('30');
+            //dump(array_diff($data['related'], $related_products));
             // #1 delete
             DB::table('related_products')
                 ->where('product_id', $id)
                 ->delete();
             // #2 insert
+            $sql_part = '';
             foreach($data['related'] as $v){
                 $v = (int)$v;
-                $sql_part = '';
                 $sql_part .= "({$id},{$v}),";
-                $sql_part = rtrim($sql_part, ',');
-                DB::insert("insert into related_products (product_id, related_id) VALUES $sql_part");
-                return;
             }
-
+            $sql_part = rtrim($sql_part, ',');
+            //dump($sql_part);
+            //die('03');
+            DB::insert("insert into related_products (product_id, related_id) VALUES $sql_part");
             return;
         }
+        //die('31');
     }
 
     /**
@@ -282,5 +307,47 @@ class ProductRepository extends CoreRepository
             DB::insert("insert into galleries (img, product_id) VALUES $sql_part");
             \Session::forget('gallery');
         }
+    }
+
+    /**
+     * Get all info about one Product
+     * @param $id
+     * @return void
+     */
+    public function getInfoProduct($id){
+        $product = $this->startConditions()
+            ->find($id);
+        return $product;
+    }
+
+    /**
+     * Get all filters for Product
+     * @param $id
+     * @return void
+     */
+    public function getFiltersProduct($id){
+        $filters = DB::table('attribute_products')
+            ->select('attr_id')
+            ->where('product_id', $id)
+            ->pluck('attr_id')
+            ->all();
+        return $filters;
+    }
+
+    public function getRelatedProduct($id){
+        $related_products = $this->startConditions()
+            ->join('related_products', 'products.id','=','related_products.related_id')
+            ->select('products.title', 'related_products.related_id')
+            ->where('related_products.product_id', $id)
+            ->get();
+        return $related_products;
+    }
+
+    public function getGallery($id){
+        $gallery = DB::table('galleries')
+            ->where('product_id', $id)
+            ->pluck('img')
+            ->all();
+        return $gallery;
     }
 }

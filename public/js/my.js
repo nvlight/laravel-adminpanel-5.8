@@ -53,3 +53,14 @@ $('#reset-filter').click(function (){
     $('#filter input[type=radio]').prop('checked', false);
     return false;
 });
+
+/** Выбор категории */
+$('#add').on('submit', function () {
+   if (!isNumber($('#parent_id').val())){
+       alert('Выберите категорию');
+       return false;
+   }
+});
+function isNumber(n){
+    return !isNaN(parseFloat(n) && isFinite(n));
+}

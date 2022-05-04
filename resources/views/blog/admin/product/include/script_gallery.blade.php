@@ -27,13 +27,14 @@
                             buttonMulti.closest('.file-upload').find('.overlay').css({'display': 'none'});
                             response = JSON.parse(response);
                             $('.' + buttonMulti.data('name')).append('<img src="{{asset('/uploads/gallery/')}}/'+ response.file+'" style="max-height: 150px;">');
-                        }, 1000);
+                        }, 300);
                     }
                 });
             }
             /** ===== */
             /** Для удаления картинок в Редактировании товара Галлерея */
             $('.del-items').on('click', function () {
+                var delItem = this;
                 var res = confirm('Подтвердите удаление');
                 if (!res) {
                     return false;
@@ -52,12 +53,15 @@
                         $this.closest('.file-upload').find('.overlay').css({'display': 'block'});
                     },
                     success: function (res) {
+                        //console.log('$(this):'+$(this));
+                        //console.log('delItem:'+delItem);
                         setTimeout(function () {
                             $this.closest('.file-upload').find('.overlay').css({'display': 'none'});
                             if (res == 1) {
                                 $this.fadeOut();
                             }
-                        }, 1000);
+                            delItem.remove();
+                        }, 300);
                     }
                 });
             });
