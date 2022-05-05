@@ -329,4 +329,77 @@ class ProductController extends AdminBaseController
         }
     }
 
+    /**
+     * Return product status = 1
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
+    public function returnStatus($id){
+        if ($id){
+            $st = $this->productRepository->returnStatusOne($id);
+            if ($st){
+                return redirect()
+                    ->route('blog.admin.products.index')
+                    ->with(['success' => 'Успешно сохранен статус!']);
+            }else{
+                return back()
+                    ->withErrors(['msg' => 'Ошибка сохранения статуса'])
+                    ->withInput();
+            }
+        }
+    }
+
+    /**
+     * Set product status = 0
+     * @param $id
+     * @return void
+     */
+    public function deleteStatus($id){
+        if ($id){
+            $st = $this->productRepository->deleteStatusOne($id);
+            if ($st){
+                return redirect()
+                    ->route('blog.admin.products.index')
+                    ->with(['success' => 'Успешно сохранен статус!']);
+            }else{
+                return back()
+                    ->withErrors(['msg' => 'Ошибка сохранения статуса'])
+                    ->withInput();
+            }
+        }
+    }
+
+    /**
+     * Set product status = $status [0,1]
+     * @param $id
+     * @return void
+     */
+    public function changeStatus(Product $product, $status){
+        $clearStatus = $status ? '1' : '0';
+        $result = $this->productRepository->changeStatus($product->id, $clearStatus);
+        if ($result){
+            return redirect()
+                ->route('blog.admin.products.index')
+                ->with(['success' => 'Успешно сохранен статус!']);
+        }else{
+            return back()
+                ->withErrors(['msg' => 'Ошибка сохранения статуса'])
+                ->withInput();
+        }
+    }
+
+    public function deleteProduct(Product $product){
+        $gallery = $this->productRepository->deleteImgGalleryFromPath($product);
+        $db = $this->productRepository->deleteFromDB($product);
+
+        if ($db){
+            return redirect()
+                ->route('blog.admin.products.index')
+                ->with(['success' => 'Успешно удалено!']);
+        }else{
+            return back()
+                ->withErrors(['msg' => 'Ошибка удаления!'])
+                ->withInput();
+        }
+    }
 }

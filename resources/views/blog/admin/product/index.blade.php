@@ -42,15 +42,13 @@
                                             <a href="{{route('blog.admin.products.edit',$product->id)}}" title="Редактировать"><i class="fa fa-fw fa-eye"></i></a>
                                             &nbsp;&nbsp;&nbsp;&nbsp;
                                             @if ($product->status == 0)
-{{--                                                {{route('blog.admin.products.returnstatus',$product->id)}}--}}
-                                                <a class="delete" href="" title="Перевести status = On"><i class="fa fa-fw fa-refresh"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <a class="delete" href="{{route('blog.admin.products.changestatus',['id' => $product->id, 'status' => '1' ] )}}" title="Перевести status = On"><i class="fa fa-fw fa-refresh"></i></a>
                                             @else
-{{--                                                {{route('blog.admin.products.deletestatus',$product->id)}}--}}
-                                                <a class="delete" href="" title="Перевести status = Off"><i class="fa fa-fw fa-close"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <a class="delete" href="{{route('blog.admin.products.changestatus',['id' => $product->id, 'status' => '0' ] )}}" title="Перевести status = Off"><i class="fa fa-fw fa-close"></i></a>
                                             @endif
 {{--                                            {{route('blog.admin.products.deleteproduct', $product->id)}}--}}
                                             @if ($product)
-                                                <a class="delete" href="" title="Удалить из БД"><i class="fa fa-fw fa-close text-danger"></i></a>
+                                                <a class="delete" href="{{route('blog.admin.products.deleteproduct', $product->id )}}" title="Удалить из БД"><i class="fa fa-fw fa-close text-danger"></i></a>
                                             @endif
 
                                         </td>

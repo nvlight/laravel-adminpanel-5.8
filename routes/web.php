@@ -74,6 +74,16 @@ Route::group(
 //            \Session::push('chich', 'and so on chich!');
         });
 
+//        Route::get('/products/return-status/{id}', [ProductController::class, 'returnStatus'] )
+//            ->name('blog.admin.products.returnstatus');
+//        Route::get('/products/delete-status/{id}', [ProductController::class, 'deleteStatus'] )
+//            ->name('blog.admin.products.deletestatus');
+        Route::get('/products/change-status/{product}/{status}', [ProductController::class, 'changeStatus'] )
+            ->name('blog.admin.products.changestatus');
+
+        Route::get('/products/delete-product/{product}', [ProductController::class, 'deleteProduct'] )
+            ->name('blog.admin.products.deleteproduct');
+
         Route::resource('products', 'ProductController')
             ->names('blog.admin.products');
 

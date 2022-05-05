@@ -350,4 +350,99 @@ class ProductRepository extends CoreRepository
             ->all();
         return $gallery;
     }
+
+    /**
+     * Set product status = 1
+     * @param $id
+     * @return bool|void
+     */
+    public function returnStatusOne($id){
+        if ($id){
+            $st = DB::update("UPDATE products SET status = '1' WHERE id = ?", [$id]);
+            if ($st){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
+    /**
+     * Set product status = 0
+     * @param $id
+     * @return bool|void
+     */
+    public function deleteStatusOne($id){
+        if ($id){
+            $st = DB::update("UPDATE products SET status = '0' WHERE id = ?", [$id]);
+            if ($st){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
+    /**
+     * Set product status = $status
+     * @param $id
+     * @return bool|void
+     */
+    public function changeStatus($productId, $status){
+        $result = DB::update("UPDATE products SET status = ? WHERE id = ?", [$status, $productId]);
+        if ($result){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Delete gallery img and main img for product
+     * @param $product
+     * @return void
+     */
+    public function deleteImgGalleryFromPath($product){
+
+        $singleImg = $product->img ?? null;
+
+        //echo "<pre>";
+        //var_dump(glob('uploads/single/*'));
+        //echo "</pre>";
+        //die();
+
+        //dump($singleImg);
+        if ($singleImg){
+            @unlink('uploads/single/' . $singleImg);
+        }
+
+        $galleryImg = DB::table('galleries')
+            ->select('img')
+            ->where('product_id', $product->id)
+            ->pluck('img')
+            ->all();
+        //dump($galleryImg);
+        if (is_array($galleryImg) && count($galleryImg)){
+            foreach($galleryImg as $img){
+                @unlink('uploads/gallery/' . $img);
+            }
+        }
+    }
+
+    public function deleteFromDB($product){
+        $related = DB::delete('DELETE FROM related_products WHERE product_id = ?', [$product->id]);
+        $attrs   = DB::delete('DELETE FROM attribute_products WHERE product_id = ?', [$product->id]);
+        $gallery = DB::delete('DELETE FROM galleries WHERE product_id = ?', [$product->id]);
+        $product = DB::delete('DELETE FROM products WHERE id = ?', [$product->id]);
+
+        if ($product){
+            return redirect()
+                ->route('blog.admin.products.index')
+                ->with(['success' => 'Продукт удален!']);
+        }else{
+            return back()
+                ->withErrors(['msg' => 'Ошибка при удалении продукта!'])
+                ->withInput();
+        }
+
+    }
 }
