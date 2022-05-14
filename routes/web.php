@@ -16,6 +16,7 @@ use \App\Http\Controllers\Blog\Admin\CategoryController;
 use \App\Http\Controllers\Blog\Admin\ProductController;
 use \App\Http\Controllers\Blog\Admin\FilterController;
 use \App\Http\Controllers\Blog\Admin\CurrencyController;
+use \App\Http\Controllers\Blog\Admin\SearchController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -112,8 +113,10 @@ Route::group(
             ->name('blog.admin.currency-delete');
         // url('/admin/currency/delete
 
-        //Route::get('/search/result', 'SearchController');
-        //Route::get('/autocomplete', '');
+        Route::get('/search/result', [SearchController::class, 'index'])
+            ->name('blog.admin.search.result');
+
+        Route::get('/autocomplete', [SearchController::class, 'search']);
 
         Route::resource('products', 'ProductController')
             ->names('blog.admin.products');
