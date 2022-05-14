@@ -158,8 +158,8 @@
 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="#">Список валют</a></li>
-                        <li><a href="#">Добавить валюту</a></li>
+                        <li><a href="{{route('blog.admin.currency')}}">Список валют</a></li>
+                        <li><a href="{{route('blog.admin.currency-add')}}">Добавить валюту</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -169,8 +169,8 @@
 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="#">Группы фильтров</a></li>
-                        <li><a href="#">Фильтры</a></li>
+                        <li><a href="{{url('admin/filter/group-filter')}}">Группы фильтров</a></li>
+                        <li><a href="{{url('admin/filter/attributes-filter')}}">Фильтры</a></li>
                     </ul>
                 </li>
             </ul>

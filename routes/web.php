@@ -14,6 +14,8 @@
 use \App\Http\Controllers\Blog\Admin\OrderController;
 use \App\Http\Controllers\Blog\Admin\CategoryController;
 use \App\Http\Controllers\Blog\Admin\ProductController;
+use \App\Http\Controllers\Blog\Admin\FilterController;
+use \App\Http\Controllers\Blog\Admin\CurrencyController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -84,9 +86,37 @@ Route::group(
         Route::get('/products/delete-product/{product}', [ProductController::class, 'deleteProduct'] )
             ->name('blog.admin.products.deleteproduct');
 
+        Route::get('/filter/group-filter', [FilterController::class, 'attributeGroup'])
+            ->name('blog.admin.filter-group');
+        Route::match(['get','post'], '/filter/group-add-group',  [FilterController::class, 'groupAdd']);
+        Route::match(['get','post'], '/filter/group-edit/{attributeGroup}',  [FilterController::class, 'groupEdit']);
+        Route::get( '/filter/group-delete/{attributeGroup}',[FilterController::class, 'groupDelete']);
+
+        Route::match(['get','post'], '/filter/attrs-add/{attributeValue?}',  [FilterController::class, 'attributeAdd'])
+            ->name('blog.admin.filter.attribute-add');
+        Route::match(['get','post'], '/filter/attrs-edit/{attributeValue}', [FilterController::class, 'attributeEdit'])
+            ->name('blog.admin.filter.attribute-edit');
+        Route::get( '/filter/attrs-delete/{attributeValue}',                [FilterController::class, 'attributeDelete'])
+            ->name('blog.admin.filter-attribute-delete');
+        Route::get('/filter/attributes-filter', [FilterController::class, 'attributeFilter'])
+            ->name('blog.admin.filter.attribute');
+
+        Route::get('/currency/index', [CurrencyController::class,'index'])
+            ->name('blog.admin.currency');
+        // url('/admin/currency/edit
+        Route::match(['get','post'], '/currency/add/',  [CurrencyController::class, 'add'])
+            ->name('blog.admin.currency-add');
+        Route::match(['get','post'], '/currency/edit/{currency?}', [CurrencyController::class, 'edit'])
+            ->name('blog.admin.currency-edit');
+        Route::get( '/currency/delete/{currency}',                [CurrencyController::class, 'delete'])
+            ->name('blog.admin.currency-delete');
+        // url('/admin/currency/delete
+
+        //Route::get('/search/result', 'SearchController');
+        //Route::get('/autocomplete', '');
+
         Route::resource('products', 'ProductController')
             ->names('blog.admin.products');
-
     });
 
   }
