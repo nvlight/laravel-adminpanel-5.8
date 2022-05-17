@@ -13,16 +13,16 @@
         <li><a href="{{route('blog.admin.users.index')}}"><i></i>{{$user}}</a></li>
     @endif
     @if (isset($product))
-        <li><a href=""><i></i>{{$product}}</a></li>
+        <li><a href="{{route('blog.admin.products.index')}}"><i></i>{{$product}}</a></li>
     @endif
     @if (isset($group_filter))
-        <li><a href=""><i></i>{{$group_filter}}</a></li>
+        <li><a href="{{route('blog.admin.filter-group')}}"><i></i>{{$group_filter}}</a></li>
     @endif
     @if (isset($attrs_filter))
-        <li><a href=""><i></i>{{$attrs_filter}}</a></li>
+        <li><a href="{{route('blog.admin.filter.attribute')}}"><i></i>{{$attrs_filter}}</a></li>
     @endif
     @if (isset($currency))
-        <li><a href=""><i></i>{{$currency}}</a></li>
+        <li><a href="{{route('blog.admin.currency')}}"><i></i>{{$currency}}</a></li>
     @endif
     <li><i class="active"></i>{{$active}}</li>
 </ol>

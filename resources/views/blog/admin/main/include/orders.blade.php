@@ -11,6 +11,11 @@
             </div>
         </div>
         <!-- /.box-header -->
+{{--        <div>--}}
+{{--            @php--}}
+{{--                dump($lastOrders);--}}
+{{--            @endphp--}}
+{{--        </div>--}}
         <div class="box-body">
             <div class="table-responsive">
                 <table class="table no-margin">
@@ -20,13 +25,14 @@
                         <th>Покупатель</th>
                         <th>Статус</th>
                         <th>Сумма</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($lastOrders as $order)
                         <tr>
-                            <td><a href="">{{$order->id}}</a></td>
-                            <td><a href="">{{ucfirst($order->name)}}</a></td>
+                            <td><a href="{{route('blog.admin.orders.edit', $order->id)}}">{{$order->id}}</a></td>
+                            <td><a href="{{route('blog.admin.users.edit', $order->user_id)}}">{{ucfirst($order->name)}}</a></td>
                             <td><span class="label label-success">
                                     @if ($order->status == 0)Новый@endif
                                     @if ($order->status == 1)Завершен@endif
@@ -34,6 +40,11 @@
                                 </span></td>
                             <td>
                                 <div class="sparkbar" data-color="#00a65a" data-height="20">{{$order->sum}}</div>
+                            </td>
+                            <td>
+                                <a href="{{route('blog.admin.orders.edit', $order->id)}}">
+                                    <i class="fa fa-fw fa-eye"></i>
+                                </a>
                             </td>
                         </tr>
 

@@ -10,6 +10,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="{{asset('adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
+    <!-- стили для select2 -->
+    <link rel="stylesheet" href="{{asset('adminlte/bower_components/select2/dist/css/select2.css')}}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{asset('adminlte/bower_components/font-awesome/css/font-awesome.min.css')}}">
     <!-- Ionicons -->
@@ -72,7 +74,7 @@
                             <li class="user-footer">
                                 <div class="pull-left">
 {{--                                    {{route('blog.admin.users.edit',Auth::user()->id)}}--}}
-                                    <a href="" class="btn btn-default btn-flat">Профиль</a>
+                                    <a href="{{ route('blog.admin.users.edit', Auth::user()->id) }}" class="btn btn-default btn-flat">Профиль</a>
                                 </div>
                                 <div class="pull-right">
                                     <a href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -133,11 +135,11 @@
               </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="">Список товаров</a></li>
-                        <li><a href="">Добавить товар</a></li>
+                        <li><a href="{{route('blog.admin.products.index')}}">Список товаров</a></li>
+                        <li><a href="{{route('blog.admin.products.create')}}">Добавить товар</a></li>
                     </ul>
                 </li>
-                <li><a href=""><i class="fa fa-database"></i> <span>Кэширование</span></a></li>
+                <li><a href="#"><i class="fa fa-database"></i> <span>Кэширование</span></a></li>
                 <li class="treeview">
                     <a href="#"><i class="fa fa-users"></i> <span>Пользователи</span>
                         <span class="pull-right-container">
@@ -156,8 +158,8 @@
 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="">Список валют</a></li>
-                        <li><a href="">Добавить валюту</a></li>
+                        <li><a href="{{route('blog.admin.currency')}}">Список валют</a></li>
+                        <li><a href="{{route('blog.admin.currency-add')}}">Добавить валюту</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -167,15 +169,14 @@
 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="">Группы фильтров</a></li>
-                        <li><a href="">Фильтры</a></li>
+                        <li><a href="{{url('admin/filter/group-filter')}}">Группы фильтров</a></li>
+                        <li><a href="{{url('admin/filter/attributes-filter')}}">Фильтры</a></li>
                     </ul>
                 </li>
             </ul>
 
             <!-- search form -->
-
-            <form action="" method="get" autocomplete="off"  style="position: absolute;">
+            <form action="{{route('blog.admin.search.result')}}" method="get" autocomplete="off"  style="position: absolute;">
                 <div class="input-group">
                     <input id="search" name="search" type="text" class="form-control" placeholder="Живой поиск...." style="color: whitesmoke; background-color:#20262a; border: none;">
                     <span class="input-group-btn">
@@ -183,9 +184,6 @@
                     </span>
                 </div>
             </form>
-
-
-
             <!-- /.search form -->
         </section>
         <!-- /.sidebar -->
@@ -211,15 +209,30 @@
 </div>
 <!-- ./wrapper -->
 
+{{--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>--}}
+<script src="{{asset('js/jquery-1.9.1.js')}}"></script>
+<script src="{{asset('js/bootstrap3-typeahead.min.js')}}"></script>
 
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script type="text/javascript">
+    var route = "{{ url('/admin/autocomplete') }}";
+    $('#search').typeahead({
+        source:  function (term, process) {
+            return $.get(route, { term: term }, function (data) {
+                return process(data);
+            });
+        }
+    });
+</script>
 
 <script>
     var pathd = '{{PATH}}';
+    //console.log('pathd: '+pathd);
 </script>
 <!-- jQuery 3 -->
 <script src="{{asset('adminlte/bower_components/jquery/dist/jquery.min.js')}}"></script>
+
+<!-- upload -->
+<script src="{{asset('js/ajaxupload.js')}}"></script>
 
 <!-- Bootstrap 3.3.7 -->
 <script src="{{asset('adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
@@ -230,9 +243,41 @@
 <!-- AdminLTE App -->
 <script src="{{asset('adminlte/dist/js/adminlte.min.js')}}"></script>
 
+<script src="{{asset('adminlte/bower_components/ckeditor/ckeditor.js')}}" ></script>
+{{--<script src="{{asset('adminlte/bower_components/ckeditor/adapters/jquery.js')}}" ></script>--}}
+{{-- давление джс кода для select2 --}}
+<script src="{{asset('adminlte/bower_components/select2/dist/js/select2.full.js')}}" ></script>
+
 <script src="{{asset('js/my.js')}}" ></script>
 
+{{--<script src="{{asset('adminlte/bower_components/ckeditor/ckeditor.js')}}" ></script>--}}
+{{--@include('ckfinder::setup')--}}
+
+<script>
+    CKEDITOR.replace( 'editor1', {
+        filebrowserBrowseUrl:      '{{ asset(route('ckfinder_browser')) }}',
+        filebrowserImageBrowseUrl: '{{ asset(route('ckfinder_browser')) }}?type=Images',
+        filebrowserFlashBrowseUrl: '{{ asset(route('ckfinder_browser')) }}?type=Flash',
+        filebrowserUploadUrl:      '{{ asset(route('ckfinder_connector')) }}?command=QuickUpload&type=Files',
+        filebrowserImageUploadUrl: '{{ asset(route('ckfinder_connector')) }}?command=QuickUpload&type=Images',
+        filebrowserFlashUploadUrl: '{{ asset(route('ckfinder_connector')) }}?command=QuickUpload&type=Flash'
+    });
+
+    {{--CKEDITOR.replace( 'editor1', {--}}
+    {{--    filebrowserBrowseUrl:      "{{asset('/adminlte/bower_components/kcfinder/browse.php?opener=ckeditor&type=files')}}",--}}
+    {{--    filebrowserImageBrowseUrl: "{{asset('/adminlte/bower_components/kcfinder/browse.php?opener=ckeditor&type=images')}}",--}}
+    {{--    filebrowserFlashBrowseUrl: "{{asset('/adminlte/bower_components/kcfinder/browse.php?opener=ckeditor&type=flash')}}",--}}
+    {{--    filebrowserUploadUrl:      "{{asset('/adminlte/bower_components/kcfinder/upload.php?opener=ckeditor&type=files')}}",--}}
+    {{--    filebrowserImageUploadUrl: "{{asset('/adminlte/bower_components/kcfinder/upload.php?opener=ckeditor&type=images')}}",--}}
+    {{--    filebrowserFlashUploadUrl: "{{asset('/adminlte/bower_components/kcfinder/upload.php?opener=ckeditor&type=flash')}}"--}}
+    {{--});--}}
+
+</script>
+
 <!-- === = ===  -->
+@include('blog.admin.product.include.script_img')
+@include('blog.admin.product.include.script_gallery')
+@include('blog.admin.product.include.script_related_prod')
 
 </body>
 </html>

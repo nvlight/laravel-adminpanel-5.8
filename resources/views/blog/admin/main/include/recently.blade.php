@@ -22,8 +22,9 @@
                             @endif
                         </div>
                         <div class="product-info">
-                            <a href="" class="product-title">{{$product->title}}
-                                <span class="label label-warning pull-right">{{$product->price}} $</span></a>
+                            <a href="{{ route('blog.admin.products.edit', $product->id) }}" class="product-title">{{$product->title}}
+                                <span class="label label-warning pull-right">{{$product->price}} $</span>
+                            </a>
                             <span class="product-description">{{$product->description}}</span>
                         </div>
                     </li>
@@ -34,7 +35,7 @@
         <!-- /.box-body -->
 
         <div class="box-footer clearfix">
-            <a href="" class="btn btn-sm btn-info btn-flat pull-left">Все продукты</a>
+            <a href="{{route('blog.admin.products.index')}}" class="btn btn-sm btn-info btn-flat pull-left">Все продукты</a>
         </div>
         <!-- /.box-footer -->
     </div>
