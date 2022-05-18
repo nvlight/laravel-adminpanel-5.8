@@ -208,10 +208,13 @@ class ProductController extends AdminBaseController
     protected function fileUploadValidator($request){
         $validator = \Validator::make($request->all(),
             [
-                'file' => 'image|max:5000',
+                //'file' => 'image|max:5000',
+                //'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5000',
+                'file' => 'mimes:jpeg,png,jpg,gif,svg|max:5000',
             ],
             [
                 'file.image' => 'Файл должен быть картинкой (jpeg, png, gif, svg)',
+                'file.mimes' => 'Ожидается картинка (jpeg,png,jpg,gif,svg)',
                 'file.max' => 'Максимальный размер картинки - 5 Мб!',
             ]);
         return $validator;
@@ -231,6 +234,7 @@ class ProductController extends AdminBaseController
         }else{
             $validator = $this->fileUploadValidator($request);
             if ($this->fileUploadValidate($validator)['fail']){
+                //return $validator;
                 return $this->fileUploadValidate($validator);
             }
 
@@ -312,7 +316,8 @@ class ProductController extends AdminBaseController
     public function gallery(Request $request){
         $validator = $this->fileUploadValidator($request);
         if ($this->fileUploadValidate($validator)['fail']){
-            return $validator;
+            //return $validator;
+            return $this->fileUploadValidate($validator);
         }
 
         if ($request->has('upload')){

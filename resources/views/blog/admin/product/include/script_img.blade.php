@@ -12,10 +12,15 @@
     function upload(img){
         let form_data = new FormData();
         form_data.append('file', img.files[0]);
-        form_data.append('_token','{{csrf_token()}}');
+        //form_data.append('_token','{{csrf_token()}}');
 
         $('#loading').css('display','block');
         $.ajax({
+            headers: {
+                //'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'X-CSRF-TOKEN': '{{csrf_token()}}',
+            },
+            mimeType: 'multipart/form-data',
             url: '{{url('/admin/products/ajax-image-upload')}}',
             type: 'POST',
             data: form_data,
